@@ -1,8 +1,8 @@
-J8Validate is a small validation library that allows lambda expressions and method chaining to write clean and concise code.
+## J8Validate is a small validation library that allows lambda expressions and method chaining to write clean and concise code.
 
-Example console program:
+####Example console program:
 
-
+```java
 public class Program {
 	
 	public static void main(String[] args) throws Exception {
@@ -33,14 +33,13 @@ public class Program {
 		System.out.println("eject...");
 	}
 }
+```
 
 
 
+###Validator class
 
-//Validator class ////////////////////////////////////////
-//////////////////////////////////////////////////////
-
-
+```java
 public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
@@ -76,13 +75,12 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	}
 	
 }
+```
+
+###Snake class
 
 
-//Snake class /////////////////////////////////////////
-////////////////////////////////////////////////////////
-
-
-
+```java
 public class Snake {
 	private boolean isVenomous;
 	private boolean isConstrictor;
@@ -107,3 +105,4 @@ public class Snake {
 		isConstrictor = !isVenomous && rand.nextInt(10) > 5? true : false;
 	}
 }
+```
