@@ -2,14 +2,10 @@ J8Validate is a small validation library that allows lambda expressions and meth
 
 Example console program:
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Program {
-	public static final String dangerousSnakes = "Warning: very dangerous snakes aboard";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Program program = new Program();
 		
 		List<Snake> snakes = new ArrayList<Snake>();
@@ -22,10 +18,34 @@ public class Program {
 			petSnakes.add(snake);
 		}
 		
-		J8Validator<Snake> validator = new J8Validator<Snake>();
+		SnakeValidator validator = new SnakeValidator();
 		
+		J8ValidationResult result = validator.validate(snakes);
+		
+		result.getErrorMessages().forEach(err -> System.out.println(err));
+		
+		if(result.anyFatal()) {
+			handleSnakeProblem();
+		}
+	}
+
+	private static void handleSnakeProblem() {
+		System.out.println("eject...");
+	}
+}
+
+
+
+
+//Validator class ////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+
+public class SnakeValidator extends AbstractJ8Validator<Snake> {
+	private final String dangerousSnakes = "Warning: dangerous snakes.";
+	
+	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes) {
 		J8ValidationResult result = validator
-				//from or fromList sets up the objects to be validated
 				.fromList(snakes)
 				.withSeverity(J8Validator.Severity.Critical)
 				.when(snake -> snake.isConstrictor() && snake.isVenomous())
@@ -38,25 +58,30 @@ public class Program {
 				.mustNot(snake -> snakes.size() + petSnakes.size() > 15)
 				.withMessage("I HAVE HAD IT WITH THESE m%th#rf^ck^&g SNAKES ON THIS m%th#rf^ck^&g PLANE")
 				.fromList(snakes)
-				.mustNot(program::validateDangerousSnakes)
+				.mustNot(this::validateDangerousSnakes)
 				.withMessage(dangerousSnakes)
-				//finally, calling toValidate returns the result
 				.toValidate();
-		
-		result.getErrorMessages().forEach(err -> System.out.println(err));
+		return result;
 	}
-	
+
+	@Override
+	public J8ValidationResult validate(List<Snake> items) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private boolean validateDangerousSnakes(Snake snake) {
 		if(snake.getLength() >= 10 && snake.isVenomous() || snake.isConstrictor()) return true;
 		return false;
 	}
+	
 }
 
 
+//Snake class /////////////////////////////////////////
+////////////////////////////////////////////////////////
 
-//Snake class
 
-import java.util.Random;
 
 public class Snake {
 	private boolean isVenomous;
