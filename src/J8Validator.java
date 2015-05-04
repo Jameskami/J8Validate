@@ -8,19 +8,24 @@ public class J8Validator<T> {
 	private List<T> filteredDefendants = new ArrayList<T>();
 	private boolean isMessageApplicable;
 	private boolean isWhen;
-	protected J8ValidationReturn result = new J8ValidationReturn();
+	protected J8ValidationResult result = new J8ValidationResult();
 	Severity severity = Severity.Warning;
 	
-	public J8ValidationReturn validate() {
+	public J8ValidationResult toValidate() {
 		return result;
 	}
 	
-	public J8Validator<T> ToValidate(List<T> defendants) {
+	public J8Validator<T> fromList(List<T> defendants) {
 		this.defendants = defendants;
-		isMessageApplicable = false;
-		severity = Severity.Warning;
-		result.isValid = true;
-		isWhen = false;
+		reset();
+		return this;
+	}
+	
+	public J8Validator<T> from(T defendant) {
+		List<T> wrapper = new ArrayList<T>();
+		wrapper.add(defendant);
+		defendants = wrapper;
+		reset();
 		return this;
 	}
 	
@@ -78,20 +83,27 @@ public class J8Validator<T> {
 		return this;
 	}
 	
-	private J8ValidationReturn.Severity mapSeverity() {
-		J8ValidationReturn.Severity severityResult = J8ValidationReturn.Severity.Warning;
+	private J8ValidationResult.Severity mapSeverity() {
+		J8ValidationResult.Severity severityResult = J8ValidationResult.Severity.Warning;
 		switch(severity) {
 			case Warning:
-				severityResult = J8ValidationReturn.Severity.Warning;
+				severityResult = J8ValidationResult.Severity.Warning;
 				break;
 			case Critical:
-				severityResult = J8ValidationReturn.Severity.Critical;
+				severityResult = J8ValidationResult.Severity.Critical;
 				break;
 			case Fatal:
-				severityResult = J8ValidationReturn.Severity.Fatal;
+				severityResult = J8ValidationResult.Severity.Fatal;
 				break;
 		}
 		return severityResult;
+	}
+	
+	private void reset() {
+		isMessageApplicable = false;
+		severity = Severity.Warning;
+		result.isValid = true;
+		isWhen = false;
 	}
 	
 	protected enum Severity {

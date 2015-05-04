@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class J8ValidationReturn {
+public class J8ValidationResult {
 	public boolean isValid = true;
 	public Map<String, Severity> errors = new HashMap<String, Severity>();
 	
