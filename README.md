@@ -1,4 +1,4 @@
-## J8Validate is a small validation library that allows lambda expressions and method chaining to write clean and concise code.
+### J8Validate is a small validation library that allows lambda expressions and method chaining to write clean and concise code.
 
 ####Example console program:
 
