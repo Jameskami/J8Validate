@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class J8Validator<T> {
+public class J8Validator<T> implements IJ8Validator<T> {
 	private List<T> defendants = new ArrayList<T>();
 	private List<T> filteredDefendants = new ArrayList<T>();
 	private boolean isMessageApplicable;
