@@ -2,12 +2,12 @@
 
 #####Creating a validator class:
 There are four types to be aware of:
-Type | Description
------------------------|-------------------------------------------------------------------
-AbstractJ8Validator | any validator class should inherit from this class
-J8Validator | implements the validation methods
-IJ8Validator | J8Validator interface with AbstractJ8Validator
-J8ValidationResult | holds errors and has various methods to be returned after validation
+| Type | Description |
+|-----------------------|-------------------------------------------------------------------|
+| AbstractJ8Validator | any validator class should inherit from this class |
+| J8Validator | implements the validation methods |
+| IJ8Validator | J8Validator interface with AbstractJ8Validator |
+| J8ValidationResult | holds errors and has various methods to be returned after validation |
 
 Step one: create a class to validate a type by inheriting from AbstractJ8Validator<T>.
 You must override the validate method that takes a list of the chosen type, but more validation methods can be added as desired.
