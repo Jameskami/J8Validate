@@ -1,11 +1,19 @@
 ### J8Validate is a small validation library that allows lambda expressions and method chaining to write concise and decoupled validation.
 
 #####Creating a validator class:
-Step one: create a class to validate a type by inheriting  from AbstractJ8Validator<T>.
-You must override  the validate method that takes a list of the chosen type, but more validation methods can be added.
-Step two: use the validator field inherited from the abstract class to validate the arguments passed into the validate method.
+There are four types to be aware of:
+Type | Description
+-----------------------|-------------------------------------------------------------------
+AbstractJ8Validator<T> | any validator class should inherit from this class
+J8Validator<T> | implements the validation methods
+IJ8Validator<T> | J8Validator<T> interface with AbstractJ8Validator<T>
+J8ValidationResult | holds errors and has various methods to be returned after validation
 
-#####Interface Methods:
+Step one: create a class to validate a type by inheriting from AbstractJ8Validator<T>.
+You must override the validate method that takes a list of the chosen type, but more validation methods can be added as desired.
+Step two: use the "validator" field inherited from the abstract class to validate the arguments passed into the validate method.
+
+#####IJ8Validator<T> Interface Methods:
 Method | Description
 --------------|---------------------------------------
 from | a single object to validate
@@ -19,7 +27,7 @@ noNulls | no object should be null
 withMessage | if any failures, add error message
 toValidate | returns a validation result
 
-customMust allows for more complicate validation that takes multiple argumenst. Example:
+customMust allows for more complicate validation that takes multiple arguments. Example:
 validator.from(list).customMust(veryComplexValidation(list, 3, 87, true, "propName"))
 .withMessage("Warning: failed").toValidate()
 
