@@ -11,8 +11,31 @@ IJ8Validator | J8Validator interface with AbstractJ8Validator
 J8ValidationResult | holds errors and has various methods to be returned
 
 Step one: create a class to validate a type by inheriting from AbstractJ8Validator<T>.
+```java
+public class MyValidator extends AbstractJ8Validator<MyType>
+```
 You must override the validate method that takes a list of the chosen type, but more validation methods can be added as desired.
+```java
+@Override
+	public J8ValidationResult validate(List<MyType> items) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+```
+
 Step two: use the "validator" field inherited from the abstract class to validate the arguments passed into the validate method.
+```java
+@Override
+	public J8ValidationResult validate(List<MyType> items) {
+		J8ValidationResult result = validator
+				.fromList(items)
+				.withSeverity(J8Validator.Severity.Critical)
+				.when(item -> item.isSomething() && item.values > 0)
+				.withMessage("Error: item(s) not valid.")
+				.toValidate();
+		return result;
+	}
+```
 
 #####IJ8Validator<T> Interface Methods:
 Method | Description
@@ -29,8 +52,9 @@ withMessage | if any failures, add error message
 toValidate | returns a validation result
 
 customMust allows for more complicate validation that takes multiple arguments. Example:
+```java
 validator.from(list).customMust(veryComplexValidation(list, 3, 87, true, "propName"))
-.withMessage("Warning: failed").toValidate()
+.withMessage("Warning: failed").toValidate()```
 
 
 ####Example console program:
