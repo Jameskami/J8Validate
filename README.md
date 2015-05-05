@@ -30,7 +30,8 @@ Step two: use the "validator" field inherited from the abstract class to validat
 		J8ValidationResult result = validator
 				.fromList(items)
 				.withSeverity(J8Validator.Severity.Critical)
-				.when(item -> item.isSomething() && item.values > 0)
+				.when(item -> item.isSomething() && item.values.Size() > 0)
+				.must(item -> item.getParent() != null)
 				.withMessage("Error: item(s) not valid.")
 				.toValidate();
 		return result;
