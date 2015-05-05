@@ -3,7 +3,7 @@
 #####Creating a validator class:
 There are four types to be aware of:
 | Type | Description |
-|-----------------------|-------------------------------------------------------------------|
+|----------|--------------|
 | AbstractJ8Validator | any validator class should inherit from this class |
 | J8Validator | implements the validation methods |
 | IJ8Validator | J8Validator interface with AbstractJ8Validator |
