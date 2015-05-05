@@ -111,4 +111,12 @@ public class J8Validator<T> implements IJ8Validator<T> {
 		Critical,
 		Fatal
 	}
+
+	public J8Validator<T> customMust(boolean returned) {
+		if(!returned) {
+			isMessageApplicable = true;
+			result.isValid = false;
+		}
+		return this;
+	}
 }

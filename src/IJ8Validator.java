@@ -13,6 +13,8 @@ public interface IJ8Validator<T> {
 
 	public J8Validator<T> must(Predicate<T> predicate);
 	
+	public J8Validator<T> customMust(boolean returned);
+	
 	public J8Validator<T> mustNot(Predicate<T> predicate);
 
 	public J8Validator<T> withMessage(String message);
