@@ -108,7 +108,7 @@ public class J8Validator<T> implements IJ8Validator<T> {
 		isWhen = false;
 	}
 	
-	protected enum Severity {
+	public enum Severity {
 		Warning,
 		Critical,
 		Fatal

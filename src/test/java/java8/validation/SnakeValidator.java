@@ -25,7 +25,12 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 				.toValidate();
 		return result;
 	}
-
+	
+	public J8ValidationResult validateSnake(Snake snake) {
+		return validator.from(snake).must(s->!s.isVenomous())
+				.withMessage("Your pet is poisonous.").toValidate();
+	}
+	
 	@Override
 	public J8ValidationResult validate(List<Snake> items) {
 		// TODO Auto-generated method stub
