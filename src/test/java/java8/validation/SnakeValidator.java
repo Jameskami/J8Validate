@@ -16,7 +16,7 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 				.mustNot(snake -> snake.isVenomous())
 				.withMessage("Pet snakes should not be venomous.")
 				.fromList(snakes)
-				.mustNot(snake -> snakes.size() + petSnakes.size() > 15)
+				.mustNot(snake -> snakes.size() + petSnakes.size() > 10)
 				.withSeverity(J8Validator.Severity.Fatal)
 				.withMessage("I HAVE HAD IT WITH THESE m%th#rf^ck^&g SNAKES ON THIS m%th#rf^ck^&g PLANE")
 				.fromList(snakes)
@@ -28,6 +28,11 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	
 	public J8ValidationResult validateSnake(Snake snake) {
 		return validator.from(snake).must(s->!s.isVenomous())
+				.withMessage("Your pet is poisonous.").toValidate();
+	}
+	
+	public J8ValidationResult validateMustNotSnake(Snake snake) {
+		return validator.from(snake).mustNot(s->s.isVenomous())
 				.withMessage("Your pet is poisonous.").toValidate();
 	}
 	

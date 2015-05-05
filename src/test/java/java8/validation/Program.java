@@ -24,14 +24,29 @@ public class Program {
 	}
 	
 	@Test
-	public void isValidListsTest() throws Exception {
+	public void isResultMessageValidTest() throws Exception {
 		J8ValidationResult result = validator.validateLists(snakes, petSnakes);
-		assertTrue(!result.isValid);
+		boolean isMessageNotEmpty = true;
+		for(String msg : result.getErrorMessages()) {
+			if(msg == null || msg.length() < 1) {
+				isMessageNotEmpty = false;
+			}
+		}
+		assertTrue(isMessageNotEmpty);
 	}
+	
 	@Test
 	public void isValidMust() {
 		Snake snake = petSnakes.get(2);
 		J8ValidationResult result = validator.validateSnake(snake);
 		assertTrue(result.isValid);
 	}
+	
+	@Test
+	public void isValidMustNot() {
+		Snake snake = petSnakes.get(2);
+		J8ValidationResult result = validator.validateMustNotSnake(snake);
+		assertTrue(result.isValid);
+	}
+	
 }
