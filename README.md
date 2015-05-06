@@ -1,14 +1,17 @@
 ### J8Validate is a small validation library that allows lambda expressions and method chaining to write concise and decoupled validation.
 
 #####Creating a validator class:
-There are four types to be aware of:
+There are a few types to be aware of:
 
 Type | Description
 ----------|--------------
 AbstractJ8Validator | any validator class should inherit from this class
-J8Validator | implements the validation methods
-IJ8Validator | J8Validator interface with AbstractJ8Validator
 J8ValidationResult | holds errors and has various methods to be returned
+J8When | returned by AbstractJ8Validator's from method. Filters objects to validate by predicate
+J8Must | returned by J8When's methods. Takes a predicate to test objects validity
+J8WithMessage | returned by J8Must. Adds a message to the errors if test fails.
+J8WithSeverity | returned by J8WithMessage. Adds levels of severity to errors
+J8ToValidate | returned by J8WithSeverity. Returns a J8ValidationResult object
 
 Step one: create a class to validate a type by inheriting from AbstractJ8Validator<T>.
 ```java
@@ -39,7 +42,7 @@ Step two: use the from method to validate the arguments passed into the validate
 	}
 ```
 
-#####IJ8Validator<T> Interface Methods:
+#####validation methods:
 Method | Description
 --------------|---------------------------------------
 from | object(s) to validate
