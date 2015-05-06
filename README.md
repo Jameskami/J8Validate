@@ -23,17 +23,18 @@ You must override the validate method that takes a list of the chosen type, but 
 	}
 ```
 
-Step two: use the "validator" field inherited from the abstract class to validate the arguments passed into the validate method.
+Step two: use the from method to validate the arguments passed into the validate method.
 ```java
 @Override
 	public J8ValidationResult validate(List<MyType> items) {
-		J8ValidationResult result = validator
-				.fromList(items)
+		J8ValidationResult result
+				from(items)
 				.withSeverity(J8Validator.Severity.Critical)
 				.when(item -> item.isSomething() && item.values.Size() > 0)
 				.must(item -> item.getParent() != null)
 				.withMessage("Error: item(s) not valid.")
 				.toValidate();
+				
 		return result;
 	}
 ```
@@ -41,21 +42,20 @@ Step two: use the "validator" field inherited from the abstract class to validat
 #####IJ8Validator<T> Interface Methods:
 Method | Description
 --------------|---------------------------------------
-from | a single object to validate
-fromList | a list to validate
-withSeverity | default is warning
-when | filter based on a predicate
+from | object(s) to validate
+when | filter based on a predicate or all
 must | all objects should pass a predicate check
 mustNot | No object should be true for the predicate
 customMust | takes a boolean. Should be true
 noNulls | no object should be null
-withMessage | if any failures, add error message
+withMessage | add error message if failure
+withSeverity | add severity if failure
 toValidate | returns a validation result
 
 customMust allows for more complicate validation that takes multiple arguments. Example:
 ```java
-validator.from(list).customMust(veryComplexValidation(list, 3, 87, true, "propName"))
-.withMessage("Warning: failed").toValidate()
+from(list).all().customMust(veryComplexValidation(list, 3, 87, true, "propName"))
+.withMessage("Warning: failed").warning().toValidate()
 ```
 
 ####Example console program:
@@ -102,22 +102,45 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
 	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes) {
-		J8ValidationResult result = validator
-				.fromList(snakes)
-				.withSeverity(J8Validator.Severity.Critical)
-				.when(snake -> snake.isConstrictor() && snake.isVenomous())
-				.withMessage("Snakes should not be both constrictors and venomous.")
-				.fromList(petSnakes)
-				.withSeverity(J8Validator.Severity.Critical)
+		J8ValidationResult result = 
+				from(petSnakes)
+				.all()
+				.must(snake -> !snake.isVenomous())
+				.withMessage("Danger: pet snakes should not be venomous.")
+				.critical()
+				.toValidate();
+		
+		result =
+				from(snakes, result)
+				.when(snake -> snake.isConstrictor())
 				.mustNot(snake -> snake.isVenomous())
-				.withMessage("Pet snakes should not be venomous.")
-				.fromList(snakes)
+				.withMessage("Alert: snakes should not be both constrictors and venomous.")
+				.fatal()
+				.toValidate();
+		
+		result =
+				from(snakes, result)
+				.all()
+				.mustNot(this::validateDangerousSnakes)
+				.withMessage("Warning: some snakes extremely lethal.")
+				.warning()
+				.toValidate();
+				
+		result =
+				from(snakes, result)
+				.all()
 				.mustNot(snake -> snakes.size() + petSnakes.size() > 15)
 				.withMessage("I HAVE HAD IT WITH THESE m%th#rf^ck^&g SNAKES ON THIS m%th#rf^ck^&g PLANE")
-				.fromList(snakes)
-				.mustNot(this::validateDangerousSnakes)
-				.withMessage(dangerousSnakes)
+				.fatal()
 				.toValidate();
+		
+		result = from(snakes, result)
+				.all()
+				.mustNot(snake -> snake.isVenomous())
+				.withMessage("Warning: some poisonous snakes.")
+				.warning()
+				.toValidate();
+		
 		return result;
 	}
 
