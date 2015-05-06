@@ -4,6 +4,12 @@ package java8.validation;
 public class J8WithSeverity<T> {
 	J8ValidationResult result = new J8ValidationResult();
 	
+	public J8ToValidate<T> info() {
+		J8ToValidate<T> toValidate = new J8ToValidate<T>();
+		toValidate.result = setResult(J8ValidationResult.Severity.Info);
+		return toValidate;
+	}
+	
 	public J8ToValidate<T> warning() {
 		J8ToValidate<T> toValidate = new J8ToValidate<T>();
 		toValidate.result = setResult(J8ValidationResult.Severity.Warning);

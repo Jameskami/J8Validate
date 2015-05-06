@@ -65,6 +65,7 @@ public class J8ValidationResult {
 	}
 	
 	public enum Severity {
+		Info,
 		Warning,
 		Critical,
 		Fatal
