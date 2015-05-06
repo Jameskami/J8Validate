@@ -7,33 +7,47 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
 	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes) {
-		J8ValidationResult result = validator
-				.fromList(snakes)
-				.withSeverity(J8Validator.Severity.Critical)
-				.when(snake -> snake.isConstrictor() && snake.isVenomous())
+		J8ValidationResult result =
+				from(snakes)
+				.all()
+				.mustNot(snake -> snake.isConstrictor() && snake.isVenomous())
 				.withMessage("Snakes should not be both constrictors and venomous.")
-				.fromList(petSnakes)
+				.warning()
+				.toValidate();
+				
+		result = from(petSnakes, result)
+				.all()
 				.mustNot(snake -> snake.isVenomous())
 				.withMessage("Pet snakes should not be venomous.")
-				.fromList(snakes)
+				.warning()
+				.toValidate();
+				
+				
+		result = from(snakes, result)
+				.all()
 				.mustNot(snake -> snakes.size() + petSnakes.size() > 10)
-				.withSeverity(J8Validator.Severity.Fatal)
 				.withMessage("I HAVE HAD IT WITH THESE m%th#rf^ck^&g SNAKES ON THIS m%th#rf^ck^&g PLANE")
-				.fromList(snakes)
+				.fatal()
+				.toValidate();
+				
+		result = from(snakes, result)
+				.all()
 				.mustNot(this::validateDangerousSnakes)
 				.withMessage(dangerousSnakes)
+				.warning()
 				.toValidate();
+		
 		return result;
 	}
 	
 	public J8ValidationResult validateSnake(Snake snake) {
-		return validator.from(snake).must(s->!s.isVenomous())
-				.withMessage("Your pet is poisonous.").toValidate();
+		return from(snake).all().must(s->!s.isVenomous())
+				.withMessage("Your pet is poisonous.").critical().toValidate();
 	}
 	
 	public J8ValidationResult validateMustNotSnake(Snake snake) {
-		return validator.from(snake).mustNot(s->s.isVenomous())
-				.withMessage("Your pet is poisonous.").toValidate();
+		return from(snake).all().mustNot(s->s.isVenomous())
+				.withMessage("Your pet is poisonous.").warning().toValidate();
 	}
 	
 	@Override
