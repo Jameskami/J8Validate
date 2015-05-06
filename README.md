@@ -1,4 +1,5 @@
 ### J8Validate is a small validation library that allows lambda expressions and method chaining to write concise and decoupled validation.
+####Validation is stateless, so it is safe to use dependancy injection or threads.
 
 #####Creating a validator class:
 There are a few types to be aware of:
@@ -47,12 +48,15 @@ Method | Description
 --------------|---------------------------------------
 from | object(s) to validate
 when | filter based on a predicate or all
+all | no filter
 must | all objects should pass a predicate check
 mustNot | No object should be true for the predicate
 customMust | takes a boolean. Should be true
-noNulls | no object should be null
 withMessage | add error message if failure
-withSeverity | add severity if failure
+info | adds info severity if failure
+warning | adds warning severity if failure
+critical | adds critical severity if failure
+fatal | adds fatal severity if failure
 toValidate | returns a validation result
 
 customMust allows for more complicate validation that takes multiple arguments. Example:
@@ -61,41 +65,7 @@ from(list).all().customMust(veryComplexValidation(list, 3, 87, true, "propName")
 .withMessage("Warning: failed").warning().toValidate()
 ```
 
-####Example console program:
-
-```java
-public class Program {
-	
-	public static void main(String[] args) throws Exception {
-		Program program = new Program();
-		
-		List<Snake> snakes = new ArrayList<Snake>();
-		List<Snake> petSnakes = new ArrayList<Snake>();
-		
-		for (int i = 0; i < 20; i++) {
-			Snake snake = new Snake();
-			snakes.add(new Snake());
-			if(snake.isVenomous()) continue;
-			petSnakes.add(snake);
-		}
-		
-		SnakeValidator validator = new SnakeValidator();
-		
-		J8ValidationResult result = validator.validateLists(snakes, petSnakes);
-		
-		result.getErrorMessages().forEach(err -> System.out.println(err));
-		
-		if(result.anyFatal()) {
-			handleSnakeProblem();
-		}
-	}
-
-	private static void handleSnakeProblem() {
-		System.out.println("eject...");
-	}
-}
-```
-
+##Example console program:
 
 
 ###Validator class
@@ -158,6 +128,41 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 		return false;
 	}
 	
+}
+```
+
+###Entry Point
+
+```java
+public class Program {
+	
+	public static void main(String[] args) throws Exception {
+		Program program = new Program();
+		
+		List<Snake> snakes = new ArrayList<Snake>();
+		List<Snake> petSnakes = new ArrayList<Snake>();
+		
+		for (int i = 0; i < 20; i++) {
+			Snake snake = new Snake();
+			snakes.add(new Snake());
+			if(snake.isVenomous()) continue;
+			petSnakes.add(snake);
+		}
+		
+		SnakeValidator validator = new SnakeValidator();
+		
+		J8ValidationResult result = validator.validateLists(snakes, petSnakes);
+		
+		result.getErrorMessages().forEach(err -> System.out.println(err));
+		
+		if(result.anyFatal()) {
+			handleSnakeProblem();
+		}
+	}
+
+	private static void handleSnakeProblem() {
+		System.out.println("eject...");
+	}
 }
 ```
 
