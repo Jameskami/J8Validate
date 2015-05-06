@@ -10,11 +10,11 @@ import org.junit.Test;
 import java8.validation.J8ValidationResult;
 
 
-public class Program {
+public class MainTest {
 	SnakeValidator validator = new SnakeValidator();
 	List<Snake> snakes = new ArrayList<Snake>();
 	List<Snake> petSnakes = new ArrayList<Snake>();
-	public Program() {
+	public MainTest() {
 		for (int i = 0; i < 20; i++) {
 			Snake snake = new Snake();
 			snakes.add(new Snake());
