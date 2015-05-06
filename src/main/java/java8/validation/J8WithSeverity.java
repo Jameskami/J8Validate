@@ -1,31 +1,31 @@
 package java8.validation;
 
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class J8WithSeverity<T> {
-	protected J8ValidationResult result = new J8ValidationResult();
+	J8ValidationResult result = new J8ValidationResult();
 	
 	public J8ToValidate<T> warning() {
-		
-		return null;
+		J8ToValidate<T> toValidate = new J8ToValidate<T>();
+		toValidate.result = setResult(J8ValidationResult.Severity.Warning);
+		return toValidate;
 	}
 	
 	public J8ToValidate<T> critical() {
-			
-			return null;
-		}
-	
-	public J8ToValidate<T> fatal() {
-		
-		return null;
+		J8ToValidate<T> toValidate = new J8ToValidate<T>();
+		toValidate.result = setResult(J8ValidationResult.Severity.Critical);
+			return toValidate;
 	}
 	
-	private J8ValidationResult cloneAndSetResult(J8ValidationResult original, J8ValidationResult.Severity severity) {
-		J8ValidationResult newResult = new J8ValidationResult();
-		newResult.isValid = original.isValid;
-		for (Map.Entry<String, J8ValidationResult.Severity> entry : original.errors.entrySet()) {
-			newResult.errors.put(entry.getKey(), severity);
+	public J8ToValidate<T> fatal() {
+		J8ToValidate<T> toValidate = new J8ToValidate<T>();
+		toValidate.result = setResult(J8ValidationResult.Severity.Fatal);
+		return toValidate;
+	}
+	
+	private J8ValidationResult setResult(J8ValidationResult.Severity severity) {
+		J8ValidationResult newResult = new J8ValidationResult(result);
+		if(result.isMessageNeeded) {
+			newResult.errors.put(result.message, severity);
 		}
 		return newResult;
 	}

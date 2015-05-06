@@ -7,7 +7,17 @@ import java.util.Map;
 
 public class J8ValidationResult {
 	public boolean isValid = true;
+	boolean isMessageNeeded = false;
 	public Map<String, Severity> errors = new HashMap<String, Severity>();
+	protected String message = "";
+	
+	public J8ValidationResult(){}
+	public J8ValidationResult(J8ValidationResult other) {
+		isValid = other.isValid;
+		for (Map.Entry<String, J8ValidationResult.Severity> entry : other.errors.entrySet()) {
+			errors.put(entry.getKey(), entry.getValue());
+		}
+	}
 	
 	public List<String> getErrorMessages() {
 		List<String> errorMsgs = new ArrayList<String>();
