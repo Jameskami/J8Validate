@@ -32,17 +32,17 @@ Step two: use the from method to validate the arguments passed into the validate
 	public J8ValidationResult validate(List<MyType> items) {
 		J8ValidationResult result
 				from(items)
-				.withSeverity(J8Validator.Severity.Critical)
 				.when(item -> item.isSomething() && item.values.Size() > 0)
 				.must(item -> item.getParent() != null)
 				.withMessage("Error: item(s) not valid.")
+				.critical()
 				.toValidate();
 				
 		return result;
 	}
 ```
 
-#####validation methods:
+#####Validation methods:
 Method | Description
 --------------|---------------------------------------
 from | object(s) to validate
