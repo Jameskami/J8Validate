@@ -3,8 +3,6 @@ package java8.validation;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -25,8 +23,6 @@ public class MainTest {
 		}
 	}
 	
-	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void isCustomMessageTest() throws Exception {
 		SnakeValidator validator = new SnakeValidator();
@@ -57,14 +53,14 @@ public class MainTest {
 	@Test
 	public void isValidMust() {
 		Snake snake = petSnakes.get(2);
-		J8ValidationResult result = validator.validateSnake(snake);
+		J8ValidationResult<String> result = validator.validateSnake(snake);
 		assertTrue(result.isValid);
 	}
 	
 	@Test
 	public void isValidMustNot() {
 		Snake snake = petSnakes.get(2);
-		J8ValidationResult result = validator.validateMustNotSnake(snake);
+		J8ValidationResult<String> result = validator.validateMustNotSnake(snake);
 		assertTrue(result.isValid);
 	}
 	
