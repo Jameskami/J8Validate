@@ -3,6 +3,8 @@ package java8.validation;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -20,6 +22,23 @@ public class MainTest {
 			snakes.add(new Snake());
 			if(snake.isVenomous()) continue;
 			petSnakes.add(snake);
+		}
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	@Test
+	public void isCustomMessageTest() throws Exception {
+		SnakeValidator validator = new SnakeValidator();
+		
+		J8ValidationResult<CustomMessage> result = new J8ValidationResult<CustomMessage>();
+		result = validator.customMsg(petSnakes, result);
+		
+		for(CustomMessage msg : result.getErrorMessages()) {
+			assertTrue(msg.getCode() == 2344);
+			assertTrue(msg.getId() == 126574876);
+			assertTrue(msg.getMessage().equals("No mutant constrictors 100 feet or longer :("));
+			assertNotNull(msg.getDate());
 		}
 	}
 	

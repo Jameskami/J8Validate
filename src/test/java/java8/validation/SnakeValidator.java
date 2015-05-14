@@ -1,10 +1,26 @@
 package java8.validation;
 
+import java.util.Calendar;
 import java.util.List;
 
 
-public class SnakeValidator extends AbstractJ8Validator<Snake> {
+class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
+	
+	public J8ValidationResult<CustomMessage> customMsg(List<Snake> snakes, J8ValidationResult<CustomMessage> result) {
+		CustomMessage cm = new CustomMessage();
+		cm.setCode(2344);
+		cm.setDate(Calendar.getInstance());
+		cm.setId(126574876);
+		cm.setMessage("No mutant constrictors 100 feet or longer :(");
+		
+		return from(snakes, result)
+		.when(snake -> snake.isConstrictor())
+		.mustNot(snake -> snake.getLength() > 100)
+		.withMessage(cm)
+		.warning()
+		.toValidate();
+	}
 	
 	public J8ValidationResult<String> validateLists(List<Snake> snakes, List<Snake> petSnakes) {
 		J8ValidationResult<String> result =
