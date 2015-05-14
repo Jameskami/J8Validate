@@ -1,11 +1,11 @@
 package java8.validation;
 
-public class J8WithMessage<T> {
-	protected J8ValidationResult result = new J8ValidationResult();
+public class J8WithMessage<T, R> {
+	protected J8ValidationResult<R> result = new J8ValidationResult<R>();
 	
-	public J8WithSeverity<T> withMessage(String message) {
-		J8ValidationResult nextResult = new J8ValidationResult(result);
-		J8WithSeverity<T> severity = new J8WithSeverity<T>();
+	public J8WithSeverity<T, R> withMessage(R message) {
+		J8ValidationResult<R> nextResult = new J8ValidationResult<R>(result);
+		J8WithSeverity<T, R> severity = new J8WithSeverity<T, R>();
 		if(result.isMessageNeeded) {
 			nextResult.message = message;
 			nextResult.isMessageNeeded = true;

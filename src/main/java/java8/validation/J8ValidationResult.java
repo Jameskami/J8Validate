@@ -5,31 +5,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class J8ValidationResult {
+public class J8ValidationResult<T> {
 	public boolean isValid = true;
 	boolean isMessageNeeded = false;
-	public Map<String, Severity> errors = new HashMap<String, Severity>();
-	protected String message = "";
+	public Map<T, Severity> errors = new HashMap<T, Severity>();
+	protected T message;
 	
 	public J8ValidationResult(){}
-	public J8ValidationResult(J8ValidationResult other) {
+	public J8ValidationResult(J8ValidationResult<T> other) {
 		isValid = other.isValid;
-		for (Map.Entry<String, J8ValidationResult.Severity> entry : other.errors.entrySet()) {
+		for (Map.Entry<T, J8ValidationResult.Severity> entry : other.errors.entrySet()) {
 			errors.put(entry.getKey(), entry.getValue());
 		}
 	}
 	
-	public List<String> getErrorMessages() {
-		List<String> errorMsgs = new ArrayList<String>();
-		for(Map.Entry<String, Severity> entry : errors.entrySet()) {
+	public List<T> getErrorMessages() {
+		List<T> errorMsgs = new ArrayList<T>();
+		for(Map.Entry<T, Severity> entry : errors.entrySet()) {
 			errorMsgs.add(entry.getKey());
 		}
 		return errorMsgs;
 	}
 	
-	public List<String> getErrorMessagesBySeverity(Severity severity) {
-		List<String> errorMsgs = new ArrayList<String>();
-		for(Map.Entry<String, Severity> entry : errors.entrySet()) {
+	public List<T> getErrorMessagesBySeverity(Severity severity) {
+		List<T> errorMsgs = new ArrayList<T>();
+		for(Map.Entry<T, Severity> entry : errors.entrySet()) {
 			if(entry.getValue() == severity) {
 				errorMsgs.add(entry.getKey());
 			}
@@ -38,7 +38,7 @@ public class J8ValidationResult {
 	}
 	
 	public boolean anyFatal() {
-		for(Map.Entry<String, Severity> entry : errors.entrySet()) {
+		for(Map.Entry<T, Severity> entry : errors.entrySet()) {
 			if(entry.getValue() == Severity.Fatal) {
 				return true;
 			}
@@ -47,7 +47,7 @@ public class J8ValidationResult {
 	}
 	
 	public boolean anyCritical() {
-		for(Map.Entry<String, Severity> entry : errors.entrySet()) {
+		for(Map.Entry<T, Severity> entry : errors.entrySet()) {
 			if(entry.getValue() == Severity.Critical) {
 				return true;
 			}
@@ -56,7 +56,7 @@ public class J8ValidationResult {
 	}
 	
 	public boolean anyWarning() {
-		for(Map.Entry<String, Severity> entry : errors.entrySet()) {
+		for(Map.Entry<T, Severity> entry : errors.entrySet()) {
 			if(entry.getValue() == Severity.Warning) {
 				return true;
 			}

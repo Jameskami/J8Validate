@@ -25,7 +25,7 @@ public class MainTest {
 	
 	@Test
 	public void isResultMessageValidTest() throws Exception {
-		J8ValidationResult result = validator.validateLists(snakes, petSnakes);
+		J8ValidationResult<String> result = validator.validateLists(snakes, petSnakes);
 		boolean isMessageNotEmpty = true;
 		for(String msg : result.getErrorMessages()) {
 			if(msg == null || msg.length() < 1) {

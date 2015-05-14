@@ -6,9 +6,9 @@ import java.util.List;
 public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
-	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes) {
-		J8ValidationResult result =
-				from(snakes)
+	public J8ValidationResult<String> validateLists(List<Snake> snakes, List<Snake> petSnakes) {
+		J8ValidationResult<String> result =
+				from(snakes, new J8ValidationResult<String>())
 				.all()
 				.mustNot(snake -> snake.isConstrictor() && snake.isVenomous())
 				.withMessage("Snakes should not be both constrictors and venomous.")
@@ -40,20 +40,14 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 		return result;
 	}
 	
-	public J8ValidationResult validateSnake(Snake snake) {
-		return from(snake).all().must(s->!s.isVenomous())
+	public J8ValidationResult<String> validateSnake(Snake snake) {
+		return from(snake, new J8ValidationResult<String>()).all().must(s->!s.isVenomous())
 				.withMessage("Your pet is poisonous.").critical().toValidate();
 	}
 	
-	public J8ValidationResult validateMustNotSnake(Snake snake) {
-		return from(snake).all().mustNot(s->s.isVenomous())
+	public J8ValidationResult<String> validateMustNotSnake(Snake snake) {
+		return from(snake, new J8ValidationResult<String>()).all().mustNot(s->s.isVenomous())
 				.withMessage("Your pet is poisonous.").warning().toValidate();
-	}
-	
-	@Override
-	public J8ValidationResult validate(List<Snake> items) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private boolean validateDangerousSnakes(Snake snake) {
