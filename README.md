@@ -1,5 +1,7 @@
 ### J8Validate is a small validation library that allows lambda expressions and method chaining to write concise and decoupled validation.
-####Validation is stateless, so it is safe to use dependancy injection or threads.
+####Validation can remain stateless and safe to use dependancy injection or threads.
+
+####J8ValidationResult's message property is now generic, so if one needs more than what is supplied out of the box, a custome class can be passed as the message
 
 #####Creating a validator class:
 There are a few types to be aware of:
@@ -18,28 +20,23 @@ Step one: create a class to validate a type by inheriting from AbstractJ8Validat
 ```java
 public class MyValidator extends AbstractJ8Validator<MyType>
 ```
-You must override the validate method that takes a list of the chosen type, but more validation methods can be added as desired.
+And create a method that returns a result:
 ```java
-@Override
-	public J8ValidationResult validate(List<MyType> items) {
-		// TODO Auto-generated method stub
-		return null;
+	public J8ValidationResult<String> validate(List<MyType> items, J8ValidationResult<String> result) {
+		return result;
 	}
 ```
 
 Step two: use the from method to validate the arguments passed into the validate method.
 ```java
-@Override
-	public J8ValidationResult validate(List<MyType> items) {
-		J8ValidationResult result
-				from(items)
-				.when(item -> item.isSomething() && item.values.Size() > 0)
-				.must(item -> item.getParent() != null)
-				.withMessage("Error: item(s) not valid.")
-				.critical()
-				.toValidate();
-				
-		return result;
+	public J8ValidationResult<String> validate(List<MyType> items, J8ValidationResult<String> result) {
+		return
+			from(items, result)
+			.when(item -> item.isSomething() && item.values.Size() > 0)
+			.must(item -> item.getParent() != null)
+			.withMessage("Error: item(s) not valid.")
+			.critical()
+			.toValidate();
 	}
 ```
 
@@ -74,9 +71,9 @@ from(list).all().customMust(veryComplexValidation(list, 3, 87, true, "propName")
 public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
-	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes) {
+	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes, J8ValidationResult<String> validationResult) {
 		J8ValidationResult result = 
-				from(petSnakes)
+				from(petSnakes, validationResult)
 				.all()
 				.must(snake -> !snake.isVenomous())
 				.withMessage("Danger: pet snakes should not be venomous.")
@@ -117,12 +114,6 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 		return result;
 	}
 
-	@Override
-	public J8ValidationResult validate(List<Snake> items) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private boolean validateDangerousSnakes(Snake snake) {
 		if(snake.getLength() >= 10 && snake.isVenomous() || snake.isConstrictor()) return true;
 		return false;
@@ -151,7 +142,7 @@ public class Program {
 		
 		SnakeValidator validator = new SnakeValidator();
 		
-		J8ValidationResult result = validator.validateLists(snakes, petSnakes);
+		J8ValidationResult result = validator.validateLists(snakes, petSnakes, new J8ValidationResult<String>());
 		
 		result.getErrorMessages().forEach(err -> System.out.println(err));
 		
