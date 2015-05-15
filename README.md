@@ -58,7 +58,7 @@ toValidate | returns a validation result
 
 customMust allows for more complicate validation that takes multiple arguments. Example:
 ```java
-from(list).all().customMust(veryComplexValidation(list, 3, 87, true, "propName"))
+from(list, result).all().customMust(veryComplexValidation(list, 3, 87, true, "propName"))
 .withMessage("Warning: failed").warning().toValidate()
 ```
 
