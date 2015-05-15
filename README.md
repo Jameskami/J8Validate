@@ -72,7 +72,7 @@ public class SnakeValidator extends AbstractJ8Validator<Snake> {
 	private final String dangerousSnakes = "Warning: dangerous snakes.";
 	
 	public J8ValidationResult validateLists(List<Snake> snakes, List<Snake> petSnakes, J8ValidationResult<String> validationResult) {
-		J8ValidationResult result = 
+		J8ValidationResult<String> result = 
 				from(petSnakes, validationResult)
 				.all()
 				.must(snake -> !snake.isVenomous())
@@ -142,7 +142,7 @@ public class Program {
 		
 		SnakeValidator validator = new SnakeValidator();
 		
-		J8ValidationResult result = validator.validateLists(snakes, petSnakes, new J8ValidationResult<String>());
+		J8ValidationResult<String> result = validator.validateLists(snakes, petSnakes, new J8ValidationResult<String>());
 		
 		result.getErrorMessages().forEach(err -> System.out.println(err));
 		
